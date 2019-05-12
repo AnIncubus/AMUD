@@ -1,0 +1,81 @@
+MUD PROTOCOL
+Created by: AnIncubus
+Last Modified: May 5, 2019
+Last Edited by: AnIncubus
+
+1. Client boots up and states attempting to connect
+2. Client attempts to connect to server, send no information
+3. Server receives connection attempt, returns successful connection
+4. Client then displays rest of information
+    i. Displays Login, Sign Up, or Update Log
+5. LOGIN
+    i. Client provides login information and encrypts it
+    ii. Client sends encrypted information
+    iii. Server receives and authenticates
+    iv. Server sends either SUCCESSS or FAIL information
+6. SIGN UP
+    i. 
+
+================================================
+This MUD (Multi-User Dungeon) assumes the usage of ASCII characters only for ease of development.
+
+=== Threads ===
+
+Server
+    - Main => Takes care of debugging and general information
+    - Listener => Listens for users trying to connect and messages being sent/received.
+    - Ping => Sends out ping messages if the user isn't responding.
+    - Logic => Takes care of the logic of the server.
+
+Client
+    - Main => Does everything.
+
+=== Communication ===
+All messages are ended by \3 (End of Text or U+03).
+
+|----------|-------------|--------|
+| MSG CODE |   MEANING   |  CODE  |
+|----------|-------------|--------|
+|   CONN   |  Connection |   00   |
+|   DISC   |  Disconnect |   01   |
+|   SGNP   |   Sign Up   |   02   |
+|   LOGN   |    Login    |   03   |
+|   FAIL   |   Failure   |   04   |
+|   MSGE   |   Message   |   05   |
+|   DIRC   |  Direction  |   06   |
+|   ACTN   |   Action    |   07   |
+|----------|-------------|--------|
+
+
+EXAMPLES:
+
+Connection/Initial handshake:
+    CONN os \3
+
+Connection/Initial handshake:
+    CONN os \3
+
+Sign Up:
+    SGNP encrypted_username encrypted_password \3
+
+Login:
+    LGN encrypted_username encrypted_password \3
+
+Failure:
+    FAIL reason \3
+
+Message (goes to the world):
+    MSG message \3
+
+Direction (i.e. north):
+    DIRC direction \3
+
+Action (i.e. open door):
+    ACTN action \3
+
+HANDSHAKE
+    user -> server (OS info delivered)
+    server -> user (public key, user id)
+
+    user: CONN os \3
+    server: CONN public_key  \3
